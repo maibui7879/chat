@@ -1,0 +1,112 @@
+# OSX
+#
+.DS_Store
+
+# Xcode
+#
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+**/.xcode.env.local
+
+# Android/IntelliJ
+#
+build/
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+.cxx/
+*.keystore
+!debug.keystore
+.kotlin/
+
+# node.js
+#
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/
+
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
+
+# Bundle artifact
+*.jsbundle
+
+# Ruby / CocoaPods
+**/Pods/
+/vendor/bundle/
+
+# Temporary files created by Metro to check the health of the file watcher
+.metro-health-check*
+
+# testing
+/coverage
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+.cache/
+submission/
+
+# Local Firebase client configuration (commit the example only)
+/src/services/firebaseConfig.ts
+**/google-services.json
+**/GoogleService-Info.plist
+
+# Environment variables; keep safe templates versioned
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Firebase CLI caches and logs
+.firebase/
+firebase-debug.log*
+database-debug.log*
+firestore-debug.log*
+ui-debug.log*
+
+# Admin SDK credentials and private keys: never bundle these into the app
+**/*firebase-adminsdk*.json
+**/service-account*.json
+**/service_account*.json
+**/serviceAccount*.json
+**/serviceAccountKey*.json
+secrets/
+.secrets/
+credentials/
+*.pem
+*.key
+*.p8
+*.p12
+*.pfx
+*.jks

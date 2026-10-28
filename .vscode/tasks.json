@@ -1,0 +1,18 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Metro: Chat app",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"start",
+				"--",
+				"--port",
+				"8081"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}

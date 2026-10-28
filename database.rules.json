@@ -1,0 +1,77 @@
+﻿{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "users": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChildren(['name'])",
+        "name": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
+        },
+        "$other": { ".validate": false }
+      }
+    },
+    "presence": {
+      ".read": "auth != null",
+      "$uid": {
+        "$session": {
+          ".write": "auth != null && auth.uid === $uid",
+          ".validate": "newData.val() === true"
+        }
+      }
+    },
+    "conversations": {
+      ".read": "auth != null && ((query.orderByChild === 'userA' && query.equalTo === auth.uid) || (query.orderByChild === 'userB' && query.equalTo === auth.uid))",
+      ".indexOn": ["userA", "userB"],
+      "$id": {
+        ".read": "auth != null && data.child('members').child(auth.uid).val() === true",
+        ".validate": "newData.hasChildren(['userA', 'userB', 'members']) && newData.child('userA').isString() && newData.child('userB').isString() && newData.child('userA').val() < newData.child('userB').val() && $id === newData.child('userA').val() + '_' + newData.child('userB').val()",
+        "userA": {
+          ".write": "auth != null && newData.parent().child('members').child(auth.uid).val() === true && (!data.exists() || newData.val() === data.val())",
+          ".validate": "newData.isString() && root.child('users').child(newData.val()).exists()"
+        },
+        "userB": {
+          ".write": "auth != null && newData.parent().child('members').child(auth.uid).val() === true && (!data.exists() || newData.val() === data.val())",
+          ".validate": "newData.isString() && root.child('users').child(newData.val()).exists()"
+        },
+        "members": {
+          ".write": "auth != null && newData.child(auth.uid).val() === true && (!data.exists() || data.child(auth.uid).val() === true)",
+          ".validate": "newData.hasChildren([newData.parent().child('userA').val(), newData.parent().child('userB').val()])",
+          "$uid": {
+            ".validate": "newData.val() === true && ($uid === newData.parent().parent().child('userA').val() || $uid === newData.parent().parent().child('userB').val())"
+          }
+        },
+        "messages": {
+          "$message": {
+            ".write": "auth != null && root.child('conversations').child($id).child('members').child(auth.uid).val() === true && !data.exists() && newData.exists()",
+            ".validate": "newData.hasChildren(['senderId','type','createdAt']) && ((newData.child('type').val() === 'text' && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 4000 && !newData.hasChild('latitude') && !newData.hasChild('longitude')) || (newData.child('type').val() === 'location' && newData.hasChildren(['latitude','longitude']) && !newData.hasChild('text')))",
+            "senderId": { ".validate": "newData.val() === auth.uid" },
+            "type": {
+              ".validate": "newData.val() === 'text' || newData.val() === 'location'"
+            },
+            "createdAt": {
+              ".validate": "newData.isNumber() && newData.val() === now"
+            },
+            "text": { ".validate": "newData.isString()" },
+            "latitude": {
+              ".validate": "newData.isNumber() && newData.val() >= -90 && newData.val() <= 90"
+            },
+            "longitude": {
+              ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180"
+            },
+            "$other": { ".validate": false }
+          }
+        },
+        "read": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && root.child('conversations').child($id).child('members').child(auth.uid).val() === true",
+            ".validate": "newData.isString() && root.child('conversations').child($id).child('messages').child(newData.val()).exists() && (!data.exists() || newData.val() >= data.val())"
+          }
+        },
+        "$other": { ".validate": false }
+      }
+    }
+  }
+}
